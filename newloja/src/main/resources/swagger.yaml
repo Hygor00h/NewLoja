@@ -1,0 +1,294 @@
+  openapi: 3.0.3
+info:
+  title: API Loja Masculina
+  description: Documentação da API REST para gerenciamento de produtos, categorias e estoque da loja masculina.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Servidor Local
+
+paths:
+  /produtos:
+    post:
+      summary: Cadastra um novo produto
+      description: Cria um produto associado a uma categoria e suas variações de estoque.
+      operationId: criarProduto
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProdutoRequestDTO'
+      responses:
+        '201':
+          description: Produto criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProdutoResponseDTO'
+        '400':
+          description: Requisição inválida
+        '404':
+          description: Categoria não encontrada
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardError'
+        '422':
+          description: Erro de validação nos campos informados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+
+    get:
+      summary: Lista produtos paginados
+      description: Retorna uma lista paginada dos produtos cadastrados.
+      operationId: listarProdutos
+      parameters:
+        - name: page
+          in: query
+          description: Número da página (iniciando em 0)
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          description: Quantidade de elementos por página
+          required: false
+          schema:
+            type: integer
+            default: 10
+        - name: sort
+          in: query
+          description: Campo para ordenação (ex. nome)
+          required: false
+          schema:
+            type: string
+            default: "nome"
+      responses:
+        '200':
+          description: Lista de produtos retornada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageProdutoResponseDTO'
+
+  /produtos/{id}:
+    get:
+      summary: Busca um produto por ID
+      description: Retorna os detalhes de um produto específico, incluindo categoria e variações de estoque.
+      operationId: buscarProdutoPorId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do produto
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Produto encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProdutoResponseDTO'
+        '404':
+          description: Produto não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardError'
+
+    delete:
+      summary: Remove um produto
+      description: Exclui um produto da loja a partir do seu ID.
+      operationId: deletarProduto
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do produto a ser removido
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Produto removido com sucesso
+        '404':
+          description: Produto não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StandardError'
+
+components:
+  schemas:
+    ItemEstoqueRequestDTO:
+      type: object
+      required:
+        - tamanho
+        - cor
+        - quantidade
+      properties:
+        tamanho:
+          type: string
+          example: "M"
+        cor:
+          type: string
+          example: "Azul"
+        quantidade:
+          type: integer
+          minimum: 0
+          example: 15
+
+    ItemEstoqueResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        tamanho:
+          type: string
+          example: "M"
+        cor:
+          type: string
+          example: "Azul"
+        quantidade:
+          type: integer
+          example: 15
+
+    ProdutoRequestDTO:
+      type: object
+      required:
+        - nome
+        - preco
+        - categoriaId
+        - estoque
+      properties:
+        nome:
+          type: string
+          maxLength: 100
+          example: "Camisa Slim Fit"
+        descricao:
+          type: string
+          example: "Camisa masculina em algodão."
+        preco:
+          type: number
+          format: double
+          minimum: 0.01
+          example: 189.90
+        categoriaId:
+          type: integer
+          format: int64
+          example: 1
+        estoque:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemEstoqueRequestDTO'
+
+    ProdutoResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        nome:
+          type: string
+          example: "Camisa Slim Fit"
+        descricao:
+          type: string
+          example: "Camisa polo masculina em algodão."
+        preco:
+          type: number
+          format: double
+          example: 189.90
+        nomeCategoria:
+          type: string
+          example: "Camisetas"
+        dataCriacao:
+          type: string
+          format: date-time
+          example: "2026-08-28T19:30:00Z"
+        estoque:
+          type: array
+          items:
+            $ref: '#/components/schemas/ItemEstoqueResponseDTO'
+
+    PageProdutoResponseDTO:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProdutoResponseDTO'
+        totalElements:
+          type: integer
+          example: 1
+        totalPages:
+          type: integer
+          example: 1
+        size:
+          type: integer
+          example: 10
+        number:
+          type: integer
+          example: 0
+
+    StandardError:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-08-28T19:35:00Z"
+        status:
+          type: integer
+          example: 404
+        error:
+          type: string
+          example: "Recurso Não Encontrado"
+        message:
+          type: string
+          example: "Produto não encontrado com o ID: 1"
+        path:
+          type: string
+          example: "/api/v1/produtos/1"
+
+    FieldErrorDTO:
+      type: object
+      properties:
+        field:
+          type: string
+          example: "preco"
+        message:
+          type: string
+          example: "O preço deve ser maior que zero"
+
+    ValidationError:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-08-28T19:35:00Z"
+        status:
+          type: integer
+          example: 422
+        error:
+          type: string
+          example: "Erro de Validação"
+        message:
+          type: string
+          example: "Um ou mais campos contêm valores inválidos"
+        path:
+          type: string
+          example: "/api/v1/produtos"
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldErrorDTO'
