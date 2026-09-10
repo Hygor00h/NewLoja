@@ -10,6 +10,7 @@ public record ProdutoResponseDTO(
 				String descricao,
 				BigDecimal preco,
 				String nomeCategoria,
+				String imagemUrl,
 				LocalDateTime dataCriacao,
 				List<ItemEstoqueResponseDTO> estoque
 ) {}

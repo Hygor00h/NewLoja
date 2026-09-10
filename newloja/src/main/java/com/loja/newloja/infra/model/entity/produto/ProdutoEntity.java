@@ -34,6 +34,9 @@ public class ProdutoEntity {
 	@OneToMany(mappedBy = "produto", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<ItemEstoqueEntity> estoque = new ArrayList<>();
 
+	@Column(name = "imagem_url")
+	private String imagemUrl;
+
 	@PrePersist
 	protected void onCreate() {
 		this.dataCriacao = LocalDateTime.now();
@@ -106,5 +109,13 @@ public class ProdutoEntity {
 
 	public void setEstoque(List<ItemEstoqueEntity> estoque) {
 		this.estoque = estoque;
+	}
+
+	public String getImagemUrl() {
+		return imagemUrl;
+	}
+
+	public void setImagemUrl(String imagemUrl) {
+		this.imagemUrl = imagemUrl;
 	}
 }

@@ -56,6 +56,7 @@ CREATE TABLE tb_produto (
     descricao TEXT,
     preco NUMERIC(10, 2) NOT NULL,
     data_criacao TIMESTAMP NOT NULL,
+    imagem_url VARCHAR(255),
     categoria_id BIGINT NOT NULL,
     CONSTRAINT fk_produto_categoria FOREIGN KEY (categoria_id) REFERENCES tb_categoria (id)
 );
@@ -79,3 +80,11 @@ INSERT INTO roles (id, name) VALUES (uuid_generate_v4(), 'ROLE_ADMIN') ON CONFLI
 INSERT INTO tb_categoria (nome) VALUES ('CAMISETAS') ON CONFLICT DO NOTHING;
 INSERT INTO tb_categoria (nome) VALUES ('CALCAS') ON CONFLICT DO NOTHING;
 INSERT INTO tb_categoria (nome) VALUES ('CALCADOS') ON CONFLICT DO NOTHING;
+
+INSERT INTO tb_produto (nome, descricao, preco, imagem_url, data_criacao, categoria_id)
+VALUES
+    ('Camiseta Marrom Classic', 'Camiseta masculina 100% algodão marrom', 89.90, 'camisamarro01.png', NOW(), 1),
+    ('Jaqueta marro com bolso', 'jaqueta marrom', 179.90, 'jaquetamarro01.png', NOW(), 2),
+    ('Jaqueta Masculina', 'Jaqueta de sarja com bolsos', 259.90, 'jaqueta.png', NOW(), 1),
+    ('Calça Jeans Azul Claro', 'Calça jeans tom claro casual', 189.90, 'calca-jeans-azul.png', NOW(), 2),
+    ('Calça Jeans Preta', 'Calça jeans preta slim fit', 199.90, 'jeans-preta.png', NOW(), 2);
