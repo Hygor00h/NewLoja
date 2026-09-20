@@ -1,7 +1,7 @@
-package com.loja.newloja.filter.specification;
+package com.loja.newloja.infra.filter.specification;
 
 
-import com.loja.newloja.filter.FindProdutoFilter;
+import com.loja.newloja.infra.filter.FindProdutoFilter;
 import com.loja.newloja.infra.model.entity.produto.ProdutoEntity;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;

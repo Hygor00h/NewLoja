@@ -5,8 +5,9 @@ import com.loja.newloja.infra.model.dto.ItemEstoqueResponseDTO;
 import com.loja.newloja.infra.model.entity.produto.ItemEstoqueEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.stereotype.Component;
 
-@Mapper
+@Mapper(componentModel = "string")
 public interface ItemEstoqueMapper {
 
 	ItemEstoqueResponseDTO toDto(ItemEstoqueEntity itemEstoque);

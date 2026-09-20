@@ -1,4 +1,4 @@
-package com.loja.newloja.filter;
+package com.loja.newloja.infra.filter;
 
 public class FindProdutoFilter {
 
