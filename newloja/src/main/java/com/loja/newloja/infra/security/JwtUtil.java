@@ -17,8 +17,6 @@ import java.util.stream.Collectors;
 @Service
 public class JwtUtil {
 
-    //private final String secretKey = "sua-chave-secreta-super-segura-que-deve-ser-bem-longa";
-
     @Value("${api.security.token.secret}")
     private String secretKey;
 

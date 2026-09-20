@@ -9,6 +9,7 @@ import com.loja.newloja.infra.mapper.ProdutoMapper;
 import com.loja.newloja.infra.repository.CategoriaRepository;
 import com.loja.newloja.infra.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class ProdutoService {
 
 	private final ProdutoRepository produtoRepository;
 	private final CategoriaRepository categoriaRepository;
-	private final ProdutoMapper produtoMapper;
+	private final ProdutoMapper produtoMapper = Mappers.getMapper(ProdutoMapper.class);
 
 	@Transactional
 	public ProdutoResponseDTO criar(ProdutoRequestDTO dto) {

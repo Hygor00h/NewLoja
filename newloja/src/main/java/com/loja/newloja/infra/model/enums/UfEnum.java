@@ -32,12 +32,10 @@ public enum UfEnum {
 
 	private final String nomeCompleto;
 
-	// Construtor do Enum
 	UfEnum(String nomeCompleto) {
 		this.nomeCompleto = nomeCompleto;
 	}
 
-	// Método para recuperar o nome por extenso se precisar exibir na tela
 	public String getNomeCompleto() {
 		return nomeCompleto;
 	}

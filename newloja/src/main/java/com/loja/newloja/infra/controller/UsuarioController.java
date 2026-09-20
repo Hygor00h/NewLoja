@@ -14,14 +14,9 @@ import org.springframework.web.bind.annotation.*;
 public class UsuarioController {
 
 	private final UsuarioService usuarioService;
-	private final JwtUtil jwtUtil;
-	private final PasswordEncoder passwordEncoder;
 
-
-	public UsuarioController(UsuarioService usuarioService, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
+	public UsuarioController(UsuarioService usuarioService) {
 		this.usuarioService = usuarioService;
-		this.jwtUtil = jwtUtil;
-		this.passwordEncoder = passwordEncoder;
 	}
 
 	@PostMapping("/login")
@@ -35,13 +30,4 @@ public class UsuarioController {
 		return ResponseEntity.ok(usuarioService.registrarUsuario(usuarios));
 	}
 
-//	@PutMapping("/perfil")
-//	public ResponseEntity<UsuarioResponseDto> atualizarDados(@Valid @RequestBody UsuarioUpdateDto usuarioUpdateDto,
-//																													 @RequestHeader("Authorization") String token) throws Exception {
-//		String tokenLimpo = token.substring(7);
-//		String email = jwtUtil.extrairEmailToken(tokenLimpo);
-//		UsuarioResponseDto response = usuarioService.atulizarDadosUsuario(email, usuarioUpdateDto);
-//
-//		return ResponseEntity.ok(response);
-//	}
 }

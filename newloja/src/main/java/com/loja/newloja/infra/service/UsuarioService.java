@@ -13,7 +13,7 @@ import com.loja.newloja.infra.repository.RolesRepository;
 import com.loja.newloja.infra.repository.UsuarioRepository;
 import com.loja.newloja.infra.security.JwtUtil;
 import jakarta.transaction.Transactional;
-import org.jspecify.annotations.NonNull;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

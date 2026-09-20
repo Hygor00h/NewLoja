@@ -16,7 +16,7 @@ public class UsuarioUpdateDto {
 	@Size(max = 15)
 	private String contato;
 
-	private String password; // Opcional! Se vier nulo/vazio, não altera.
+	private String password;
 
 	@Valid
 	@NotNull
