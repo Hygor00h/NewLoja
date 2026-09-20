@@ -21,7 +21,7 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-	//Captura erros de validação de Dtos(ex: @NotBlack, @Email, @Pattern
+
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<StandardErrorDto> handleValidationErrors(MethodArgumentNotValidException ex, HttpServletRequest request){
 		HttpStatus status = HttpStatus.BAD_REQUEST;

@@ -71,6 +71,26 @@ CREATE TABLE tb_item_estoque (
     CONSTRAINT uk_item_estoque_variacao UNIQUE (produto_id, tamanho, cor)
 );
 
+CREATE TABLE tb_carrinho (
+    id BIGSERIAL PRIMARY KEY,
+    usuario_id UUID NOT NULL UNIQUE,
+    data_criacao TIMESTAMP NOT NULL DEFAULT NOW(),
+    CONSTRAINT fk_carrinho_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios (id) ON DELETE CASCADE
+);
+
+CREATE TABLE tb_item_carrinho (
+    id BIGSERIAL PRIMARY KEY,
+    carrinho_id BIGINT NOT NULL,
+    item_estoque_id BIGINT NOT NULL,
+    quantidade INT NOT NULL CHECK (quantidade > 0),
+    CONSTRAINT fk_item_carrinho_carrinho FOREIGN KEY (carrinho_id) REFERENCES tb_carrinho (id) ON DELETE CASCADE,
+    CONSTRAINT fk_item_carrinho_estoque FOREIGN KEY (item_estoque_id) REFERENCES tb_item_estoque (id) ON DELETE RESTRICT,
+    CONSTRAINT uk_carrinho_item_estoque UNIQUE (carrinho_id, item_estoque_id)
+);
+
+CREATE INDEX idx_carrinho_usuario ON tb_carrinho (usuario_id);
+CREATE INDEX idx_item_carrinho_carrinho ON tb_item_carrinho (carrinho_id);
+
 CREATE INDEX idx_produto_categoria ON tb_produto (categoria_id);
 CREATE INDEX idx_item_estoque_produto ON tb_item_estoque (produto_id);
 
@@ -86,5 +106,6 @@ VALUES
     ('Camiseta Marrom Classic', 'Camiseta masculina 100% algodão marrom', 89.90, 'camisamarro01.png', NOW(), 1),
     ('Jaqueta marro com bolso', 'jaqueta marrom', 179.90, 'jaquetamarro01.png', NOW(), 2),
     ('Jaqueta Masculina', 'Jaqueta de sarja com bolsos', 259.90, 'jaqueta.png', NOW(), 1),
-    ('Calça Jeans Azul Claro', 'Calça jeans tom claro casual', 189.90, 'calca-jeans-azul.png', NOW(), 2),
     ('Calça Jeans Preta', 'Calça jeans preta slim fit', 199.90, 'jeans-preta.png', NOW(), 2);
+
+--('Calça Jeans Azul Claro', 'Calça jeans tom claro casual', 189.90, 'calca-jeans-azul.png', NOW(), 2),

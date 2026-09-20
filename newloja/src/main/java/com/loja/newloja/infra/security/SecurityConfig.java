@@ -54,6 +54,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST,"/newloja/login", "/newloja/setup","/newloja/register").permitAll() // Requer autenticação para qualquer endpoint que comece com /usuario/
                         //.requestMatchers(HttpMethod.PUT,"/usuario").permitAll()
                         .requestMatchers(HttpMethod.GET,"/usuario/buscar","/api/v1/produtos","/api/v1/produtos/buscafilter").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/usuario/buscar").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/carrinho").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/eventos").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

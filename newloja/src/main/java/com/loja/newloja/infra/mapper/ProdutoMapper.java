@@ -5,7 +5,7 @@ import com.loja.newloja.infra.model.dto.ProdutoResponseDTO;
 import com.loja.newloja.infra.model.entity.produto.ProdutoEntity;
 import org.mapstruct.*;
 
-@Mapper
+@Mapper(componentModel = "string")
 public interface ProdutoMapper {
 
 	@Mapping(target = "nomeCategoria", source = "categoria.nome")

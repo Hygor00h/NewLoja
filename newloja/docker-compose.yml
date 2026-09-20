@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # Container do Banco de Dados PostgreSQL
   db:
     image: postgres:15-alpine
     container_name: newloja-db
@@ -15,7 +14,6 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  # Container da Aplicação Spring Boot (newloja)
   app:
     build: .
     container_name: newloja-app
@@ -23,7 +21,6 @@ services:
     ports:
       - "8080:8080"
     environment:
-      # Aponta a URL do banco para o serviço 'db' do Docker
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/lojamasculinadb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: Comprovante002!

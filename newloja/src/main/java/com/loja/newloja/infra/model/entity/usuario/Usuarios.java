@@ -58,7 +58,7 @@ public class Usuarios implements UserDetails {
 					inverseJoinColumns = @JoinColumn(name = "roles_id", columnDefinition = "UUID"))
 	private Set<RoleEntity> roles = new HashSet<>();
 
-	//@MapsId
+
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "endereco_id", referencedColumnName = "id", nullable = false)
 	private EnderecoEntity endereco;
