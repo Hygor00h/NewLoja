@@ -16,7 +16,6 @@ CREATE TABLE enderecos (
             ))
 );
 
--- Criar a tabela de Roles
 CREATE TABLE roles (
     id UUID PRIMARY KEY,
     name VARCHAR(30) UNIQUE NOT NULL
@@ -88,6 +87,16 @@ CREATE TABLE tb_item_carrinho (
     CONSTRAINT uk_carrinho_item_estoque UNIQUE (carrinho_id, item_estoque_id)
 );
 
+CREATE TABLE tb_compra (
+    id BIGSERIAL PRIMARY KEY,
+    nome_produto VARCHAR(255) NOT NULL,
+    nome_comprador VARCHAR(255) NOT NULL,
+    comprador_id UUID NOT NULL,
+    valor_produto NUMERIC(10, 2) NOT NULL,
+    status_processo VARCHAR(50) NOT NULL,
+    horario_compra TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE INDEX idx_carrinho_usuario ON tb_carrinho (usuario_id);
 CREATE INDEX idx_item_carrinho_carrinho ON tb_item_carrinho (carrinho_id);
 
@@ -109,3 +118,9 @@ VALUES
     ('Calça Jeans Preta', 'Calça jeans preta slim fit', 199.90, 'jeans-preta.png', NOW(), 2);
 
 --('Calça Jeans Azul Claro', 'Calça jeans tom claro casual', 189.90, 'calca-jeans-azul.png', NOW(), 2),
+
+INSERT INTO tb_item_estoque (produto_id, tamanho, cor, quantidade)
+VALUES (1,'M', 'Marrom', '2'),
+       (2,'M', 'Marrom', '3'),
+       (3,'G', 'Jeans','2'),
+       (4,'M','Preta','5');
