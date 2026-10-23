@@ -19,14 +19,32 @@ services:
     container_name: newloja-app
     restart: always
     ports:
-      - "8080:8080"
+      - "8081:8081"
     environment:
+      SERVER_PORT: 8081
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/lojamasculinadb
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: Comprovante002!
       SPRING_FLYWAY_ENABLED: "true"
+
+      SPRING_RABBITMQ_HOST: rabbitmq
+      SPRING_RABBITMQ_PORT: 5672
+      SPRING_RABBITMQ_USERNAME: guest
+      SPRING_RABBITMQ_PASSWORD: guest
     depends_on:
       - db
+      - rabbitmq
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: newloja-rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
 
 volumes:
   postgres_data:
