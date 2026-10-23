@@ -1,5 +1,6 @@
 package com.loja.newloja.infra.service;
 
+import com.loja.newloja.infra.mapper.CarrinhoMapper;
 import com.loja.newloja.infra.model.dto.carrinhoDtos.AdicionarItemDTO;
 import com.loja.newloja.infra.model.dto.carrinhoDtos.CarrinhoResponseDTO;
 import com.loja.newloja.infra.model.dto.carrinhoDtos.ItemCarrinhoResponseDTO;
@@ -9,6 +10,7 @@ import com.loja.newloja.infra.model.entity.produto.ItemEstoqueEntity;
 import com.loja.newloja.infra.repository.CarrinhoRepository;
 import com.loja.newloja.infra.repository.ItemEstoqueRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,16 +24,21 @@ public class CarrinhoService {
 
     private final CarrinhoRepository carrinhoRepository;
     private final ItemEstoqueRepository itemEstoqueRepository;
+    private final CarrinhoMapper carrinhoMapper = Mappers.getMapper(CarrinhoMapper.class);
 
     public CarrinhoService(CarrinhoRepository carrinhoRepository, ItemEstoqueRepository itemEstoqueRepository) {
         this.carrinhoRepository = carrinhoRepository;
         this.itemEstoqueRepository = itemEstoqueRepository;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public CarrinhoResponseDTO obterOuCriarCarrinho(UUID usuarioId) {
         CarrinhoEntity carrinho = carrinhoRepository.findByUsuarioId(usuarioId)
-                .orElseGet(() -> carrinhoRepository.save(new CarrinhoEntity(usuarioId)));
+                .orElseGet(()->{
+                    CarrinhoEntity novoCarrinho = new CarrinhoEntity();
+                    novoCarrinho.setUsuarioId(usuarioId);
+                    return carrinhoRepository.save(novoCarrinho);
+                });
         return converterParaDTO(carrinho);
     }
 
@@ -47,7 +54,6 @@ public class CarrinhoService {
             throw new IllegalArgumentException("Estoque insuficiente. Disponível: " + estoque.getQuantidade());
         }
 
-        // Verifica se o item já está no carrinho
         ItemCarrinhoEntity itemExistente = carrinho.getItens().stream()
                 .filter(i -> i.getItemEstoque().getId().equals(dto.itemEstoqueId()))
                 .findFirst()
@@ -65,7 +71,7 @@ public class CarrinhoService {
         }
 
         carrinho = carrinhoRepository.save(carrinho);
-        return converterParaDTO(carrinho);
+        return carrinhoMapper.toCarinhoResponse(carrinho);
     }
 
     @Transactional
@@ -83,7 +89,7 @@ public class CarrinhoService {
         }
         carrinho = carrinhoRepository.save(carrinho);
 
-        return converterParaDTO(carrinho);
+        return carrinhoMapper.toCarinhoResponse(carrinho);
     }
 
 
